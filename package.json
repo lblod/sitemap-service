@@ -1,0 +1,22 @@
+{
+  "name": "sitemap-service",
+  "version": "0.1.0",
+  "description": "Microservice to build a sitemap based on a SPARQL query",
+  "dependencies": {
+    "cron": "^1.3.0",
+    "event-stream": "^3.3.4",
+    "fs-extra": "^5.0.0",
+    "request": "^2.85.0",
+    "xmlbuilder": "^10.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lblod/sitemap-service.git"
+  },
+  "author": "redpencil.io",
+  "license": "MIT"
+}
