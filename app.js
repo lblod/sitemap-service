@@ -12,7 +12,11 @@ app.get('/sitemap.xml', async function( req, res, next ) {
     }
     else {
       // else build file and return
-      const urls = await querySitemapResources();
+      var urls = await querySitemapResources();
+      if(urls) {
+        const baseUrl = urls[0].split('/').slice(0, 3).join('/');
+        urls.unshift(baseUrl);
+      }
       await buildSitemap(urls);
       returnSitemap(res);
     }
