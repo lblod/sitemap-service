@@ -9,13 +9,14 @@ version: "3.4"
 services:
   sitemap:
     image: lblod/sitemap-service
-    volumes: 
+    volumes:
       - ./config/sitemap/:/config/
     links:
       - database:database
 ```
 
-Create the appropriate query in `./config/sitemap/query.rq`. The query should select `url`, this url will be used in the sitemap.
+Create the appropriate query in `./config/sitemap/query.rq`. The query should select `url`. This url will be used in the sitemap.
+The query doesn't need to select the base url of the website, it will be automatically deduced by the service.
 
 Make sure to add the appropriate dispatcher rule:
 
@@ -32,4 +33,3 @@ Currently this service is very much a proof of concept, the following improvemen
  - regenerate the sitemap after a certain time
  - support batching for queries so long running queries can be optimized in batches
  - use auth-sudo for queries
-
