@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { app, query } from 'mu';
 import xmlbuilder from 'xmlbuilder';
+import path from 'path';
 
 const sitemapPath = 'sitemap.xml';
 
@@ -37,12 +38,11 @@ async function ensureSitemapExists() {
 async function querySitemapResources(urls, folderPath, fileExtension) {
   const files = fs.readdirSync(folderPath);
   for (var i = 0; i < files.length; i++) {
-    const filename = folderPath + files[i];
+    const filename = path.join(folderPath, files[i]);
     const stat = fs.statSync(filename);
     if (stat.isDirectory()) {
       // Recursive call
-      const folder = filename + '/';
-      urls = urls.concat(await querySitemapResources(urls, folder, fileExtension));
+      urls = urls.concat(await querySitemapResources(urls, filename, fileExtension));
     } else if (filename.indexOf(fileExtension) >= 0) {
       const queryString = fs.readFileSync(filename).toString('utf-8');
       const result = await query(queryString);
