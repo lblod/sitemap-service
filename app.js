@@ -4,9 +4,12 @@ import xmlbuilder from 'xmlbuilder';
 import path from 'path';
 import moment from 'moment';
 
-const sitemapPath = 'sitemap.xml';
+const sitemapPath = '/data/sitemap.xml';
 const sitemapMaxAge = process.env.SITEMAP_MAX_AGE || 5;
 
+if (!fs.existsSync('/data')) {
+  fs.mkdirSync('/data');
+}
 
 app.get('/sitemap.xml', async function(req, res, next) {
   try {

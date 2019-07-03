@@ -20,6 +20,12 @@ services:
 Create the appropriate query in `./config/sitemap/query.rq`. The query should select `url`. This url will be used in the sitemap.
 The query doesn't need to select the base url of the website, it will be automatically deduced by the service.
 
+The sitemap will be created in your docker container in `/data/sitemap.xml`. To keep the sitemap after a container removal, mount the following volume:
+```
+volumes:
+  - ./data/sitemap/:/data/
+```
+
 Make sure to add the appropriate dispatcher rule:
 
 ```
