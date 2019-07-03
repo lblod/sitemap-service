@@ -2,7 +2,6 @@ import fs from 'fs';
 import { app, query } from 'mu';
 import xmlbuilder from 'xmlbuilder';
 import path from 'path';
-import moment from 'moment';
 
 const sitemapPath = '/data/sitemap.xml';
 const sitemapMaxAge = process.env.SITEMAP_MAX_AGE || 5;
@@ -34,7 +33,7 @@ async function ensureSitemapIsRecent() {
     const birthtime = fs.statSync(sitemapPath).birthtime;
     const datetime = new Date();
 
-    if (moment(datetime).diff(moment(birthtime), 'minutes') >= sitemapMaxAge) {
+    if ((datetime - birthtime) >= sitemapMaxAge * 1000 * 60) {
       console.log('Sitemap is too old, deleting.');
       fs.unlinkSync(sitemapPath);
     }
