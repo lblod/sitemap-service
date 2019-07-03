@@ -2,11 +2,15 @@ import fs from 'fs';
 import { app, query } from 'mu';
 import xmlbuilder from 'xmlbuilder';
 import path from 'path';
+import moment from 'moment';
 
 const sitemapPath = 'sitemap.xml';
+const sitemapMaxAge = process.env.SITEMAP_MAX_AGE || 5;
+
 
 app.get('/sitemap.xml', async function(req, res, next) {
   try {
+    await ensureSitemapIsRecent();
     await ensureSitemapExists();
     returnSitemap(res);
   } catch (e) {
@@ -22,6 +26,18 @@ function returnSitemap(res) {
   stream.pipe(res);
 }
 
+async function ensureSitemapIsRecent() {
+  if (fs.existsSync(sitemapPath)) {
+    const birthtime = fs.statSync(sitemapPath).birthtime;
+    const datetime = new Date();
+
+    if (moment(datetime).diff(moment(birthtime), 'minutes') >= sitemapMaxAge) {
+      console.log('Sitemap is too old, deleting.');
+      fs.unlinkSync(sitemapPath);
+    }
+  }
+}
+
 async function ensureSitemapExists() {
   if (!fs.existsSync(sitemapPath)) {
     // if file doesn't exist
@@ -31,7 +47,10 @@ async function ensureSitemapExists() {
       const baseUrl = new URL(urls[0]).origin;
       urls.unshift(baseUrl);
     }
+    console.log('Creating a new sitemap.');
     await buildSitemap(urls);
+  } else {
+    console.log('Serving an existing sitemap.');
   }
 }
 
