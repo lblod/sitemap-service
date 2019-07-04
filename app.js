@@ -6,8 +6,9 @@ import path from 'path';
 const sitemapPath = '/data/sitemap.xml';
 const sitemapMaxAge = process.env.SITEMAP_MAX_AGE || 5;
 
-if (!fs.existsSync('/data')) {
-  fs.mkdirSync('/data');
+const sitemapFolder = path.dirname(sitemapPath);
+if (!fs.existsSync(sitemapFolder)) {
+  fs.mkdirSync(sitemapFolder);
 }
 
 app.get('/sitemap.xml', async function(req, res, next) {
