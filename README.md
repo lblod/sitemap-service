@@ -1,7 +1,7 @@
 # Sitemap service
 This service can be used to generate a [sitemap](http://sitemaps.org) for a website, it's assumed you run this service in a mu.semte.ch stack.
 
-## usage
+## Usage
 Add to service to docker-compose.yml
 
 ```
@@ -9,6 +9,8 @@ version: "3.4"
 services:
   sitemap:
     image: lblod/sitemap-service
+    environment:
+      SITEMAP_MAX_AGE: 5
     volumes:
       - ./config/sitemap/:/config/
     links:
@@ -18,6 +20,12 @@ services:
 Create the appropriate query in `./config/sitemap/query.rq`. The query should select `url`. This url will be used in the sitemap.
 The query doesn't need to select the base url of the website, it will be automatically deduced by the service.
 
+The sitemap will be created in your docker container in `/data/sitemap.xml`. To keep the sitemap after a container removal, mount the following volume:
+```
+volumes:
+  - ./data/sitemap/:/data/
+```
+
 Make sure to add the appropriate dispatcher rule:
 
 ```
@@ -26,9 +34,13 @@ get "/sitemap.xml" do
 end
 ```
 
+### Environment variables
 
-## roadmap
+```
+SITEMAP_MAX_AGE: optional, default '5' : the maximum age allowed for the sitemap, in minutes
+```
+
+## Roadmap
 Currently this service is very much a proof of concept, the following improvements should be made:
- - regenerate the sitemap after a certain time
  - support batching for queries so long running queries can be optimized in batches
  - use auth-sudo for queries
