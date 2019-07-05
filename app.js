@@ -68,7 +68,7 @@ async function querySitemapResources(urls, folderPath, fileExtension) {
     } else if (filename.indexOf(fileExtension) >= 0) {
       const queryString = fs.readFileSync(filename).toString('utf-8');
       const result = await query(queryString);
-      urls = result.results.bindings.map((row) => row['url'].value);
+      urls = urls.concat(result.results.bindings.map((row) => row['url'].value));
     };
   };
   return urls;
